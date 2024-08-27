@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("BdInFolder").addEventListener("change", updateUrl);
     document.getElementById("domainRoot").addEventListener("change", updateUrl);
   
+    // Attach input event listener to the branded domain input field
+    document.getElementById("brandedDomain").addEventListener("input", handleBrandedDomainChange);
+  
     // Function to add a new folder input field
     window.addFolder = function () {
       const folderContainer = document.getElementById("folderContainer");
@@ -36,67 +39,103 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Function to update the generated URL based on user inputs
     function updateUrl() {
-      const accountName = document.getElementById("accountName").value.trim();
-      const folderInputs = document.querySelectorAll(".folderName");
-      const folders = Array.from(folderInputs)
-        .map((input) => input.value.trim())
-        .filter((value) => value);
-      const flipbookName = document.getElementById("flipbookName").value.trim();
-      const brandedDomain = document.getElementById("brandedDomain").value;
-      const domainRoot = document.getElementById("domainRoot").checked;
-      const useBrandedDomainInFolder = document.getElementById("BdInFolder").checked;
+        const accountName = document.getElementById("accountName").value.trim();
+        const folderInputs = document.querySelectorAll(".folderName");
+        const folders = Array.from(folderInputs)
+          .map((input) => input.value.trim())
+          .filter((value) => value);
+        const flipbookName = document.getElementById("flipbookName").value.trim();
+        const brandedDomain = document.getElementById("brandedDomain").value;
+        const domainRoot = document.getElementById("domainRoot").checked;
+        const useBrandedDomainInFolder = document.getElementById("BdInFolder").checked;
+      
+        let url = "https://";
+        let mainDomain = "viewer.ipaper.io";
+        let accountNamePart = "";
+        let folderPath = "";
+        let flipbookPath = "";
+      
+        // Determine the main domain based on user input
+        if (brandedDomain) {
+          mainDomain = brandedDomain;
+          if (!domainRoot && accountName) {
+            accountNamePart = `/${sanitizeUrlPart(accountName)}`;
+          }
+        } else {
+          // Default viewer domain, always include account name if available
+          if (accountName) {
+            accountNamePart = `/${sanitizeUrlPart(accountName)}`;
+          }
+        }
+      
+        // Construct the folder path if there are folders
+        if (folders.length > 0) {
+          if (domainRoot && useBrandedDomainInFolder) {
+            // If there's exactly one folder, do not include a leading `/`
+            if (folders.length === 1) {
+              folderPath = ""; // No leading slash
+            } else {
+              folderPath = "/" + folders.slice(1).map(sanitizeUrlPart).join("/");
+            }
+          } else {
+            // Normal behavior
+            folderPath = "/" + folders.map(sanitizeUrlPart).join("/");
+          }
+        }
+      
+        // Add the flipbook name to the path if provided
+        if (flipbookName) {
+          flipbookPath = `/${sanitizeUrlPart(flipbookName)}`;
+        }
+      
+        // Construct and display the full URL with color coding
+        document.getElementById("generatedUrl").innerHTML = `
+          <span class="blue-text">${url}${mainDomain}</span>
+          ${
+            accountNamePart && !domainRoot && !useBrandedDomainInFolder
+              ? '<span class="orange-text">' + accountNamePart + "</span>"
+              : ""
+          }
+          ${
+            folderPath
+              ? '<span class="green-text">' + folderPath + "</span>"
+              : ""
+          }
+          ${
+            flipbookPath
+              ? '<span class="red-text">' + flipbookPath + "</span>"
+              : ""
+          }
+        `;
+      
+        // Update admin panel elements
+        updateAdminPanel(accountName, folders, flipbookName, useBrandedDomainInFolder);
+      }
+      
   
-      let url = "https://";
-      let mainDomain = "viewer.ipaper.io";
-      let accountNamePart = "";
-      let folderPath = "";
-      let flipbookPath = "";
+    // Function to handle changes in the branded domain input
+    function handleBrandedDomainChange() {
+      const brandedDomain = document.getElementById("brandedDomain").value.trim();
+      const domainRootCheckbox = document.getElementById("domainRoot");
+      const BdInFolderCheckbox = document.getElementById("BdInFolder");
   
-      // Determine the main domain based on user input
       if (brandedDomain) {
-        mainDomain = brandedDomain;
-        if (!domainRoot && accountName) {
-          accountNamePart = `/${sanitizeUrlPart(accountName)}`;
-        }
+        // Enable and check the checkboxes if brandedDomain is not empty
+        domainRootCheckbox.disabled = false;
+        BdInFolderCheckbox.disabled = false;
+        // Ensure checkboxes are in the correct state based on the conditions
+        domainRootCheckbox.checked = false;
+        BdInFolderCheckbox.checked = false;
       } else {
-        // Default viewer domain, always include account name if available
-        if (accountName) {
-          accountNamePart = `/${sanitizeUrlPart(accountName)}`;
-        }
+        // Disable and uncheck the checkboxes if brandedDomain is empty
+        domainRootCheckbox.disabled = true;
+        BdInFolderCheckbox.disabled = true;
+        domainRootCheckbox.checked = false;
+        BdInFolderCheckbox.checked = false;
       }
   
-      // Construct the folder path if there are folders
-      if (folders.length > 0) {
-        folderPath = "/" + folders.map(sanitizeUrlPart).join("/");
-      }
-  
-      // Add the flipbook name to the path if provided
-      if (flipbookName) {
-        flipbookPath = `/${sanitizeUrlPart(flipbookName)}`;
-      }
-  
-      // Construct and display the full URL with color coding
-      document.getElementById("generatedUrl").innerHTML = `
-                  <span class="blue-text">${url}${mainDomain}</span>
-                  ${
-                    accountNamePart
-                      ? '<span class="orange-text">' + accountNamePart + "</span>"
-                      : ""
-                  }
-                  ${
-                    folderPath
-                      ? '<span class="green-text">' + folderPath + "</span>"
-                      : ""
-                  }
-                  ${
-                    flipbookPath
-                      ? '<span class="red-text">' + flipbookPath + "</span>"
-                      : ""
-                  }
-              `;
-  
-      // Update admin panel elements
-      updateAdminPanel(accountName, folders, flipbookName, useBrandedDomainInFolder);
+      // Update URL when brandedDomain changes
+      updateUrl();
     }
   
     // Function to update the account name, folder structure, and flipbook name in the admin section
@@ -288,5 +327,8 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Initial call to set the flipbook class
     updateFlipbookLevel(document.querySelectorAll(".folderName").length);
+  
+    // Initial call to handle branded domain input change
+    handleBrandedDomainChange();
   });
   
