@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flipbook URL Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div id="inputs">
+        <h1 id="title">Flipbook URL Simulator</h1>
+        <div id="group-1" class="input-group">
+          <label for="accountName">Account Name:</label>
+          <input
+            type="text"
+            id="accountName"
+            placeholder="Enter account name"
+          />
+        </div>
+
+        <div id="group-2" class="input-group folders">
+          <label for="folderName">Folder(s):</label>
+          <div id="folderContainer">
+            <input
+              type="text"
+              class="folderName"
+              placeholder="Enter folder name"
+            />
+          </div>
+          <button onclick="addFolder()">Add Folder</button>
+        </div>
+
+        <div id="group-3" class="input-group">
+          <label for="flipbookName">Flipbook Name:</label>
+          <input
+            type="text"
+            id="flipbookName"
+            placeholder="Enter flipbook name"
+          />
+        </div>
+
+        <div id="group-4" class="input-group">
+          <label for="brandedDomain">Branded Domain:</label>
+          <input
+            type="text"
+            id="brandedDomain"
+            placeholder="Enter branded domain (optional)"
+          />
+        </div>
+
+        <div id="group-5" class="input-group" style="display: flex">
+          <label style="margin-right: 25px">
+            <input type="checkbox" id="domainRoot" />
+            Enable Domain Root
+          </label>
+          <label>
+            <input type="checkbox" id="BdInFolder" />
+            Use Branded Domain in Folder
+          </label>
+        </div>
+
+        <div id="group-6">
+          <h2>Generated URL:</h2>
+          <p id="generatedUrl">
+            <span class="main-domain">https://viewer.ipaper.io</span
+            >/account-name/folder/flipbook
+          </p>
+        </div>
+      </div>
+      <div id="admin">
+        <div id="adminContainer">
+          <div class="titles">
+            <img src="media/flipbooks.png" alt="Flipbook-title" />
+            <img src="media/buttons.png" alt="buttons" />
+          </div>
+          <div class="adminFolder">
+            <!-- Updated admin section with IDs and placeholders -->
+            <div id="accountName" class="title">
+              <p id="accountTitle">Account Name</p>
+              <p style="margin-left: 5px" id="accountURL">(<span class="blue-text base-url-text">https://viewer.ipaper.io</span><span class="orange-text acc-url-text"></span>)</p>
+              <p class="dots">...</p>
+            </div>
+            <!-- Placeholder for folders -->
+            <div class="foldersContainer">
+              <!-- Folder structure will be dynamically added here -->
+            </div>
+            <!-- Flipbook name placeholder -->
+            <div class="line">
+              <div class="level level-0" id="flipbook-level">
+                <img
+                  id="flipbook-icon"
+                  src="media/flipbook-icon.png"
+                  alt="Flipbook-icon"
+                />
+                <p class="leveltext">Flipbook</p>
+                <p id="FlipbookURL">
+                  (<span class="blue-text base-url-text">https://viewer.ipaper.io</span><span class="orange-text acc-url-text"></span><span id="folder-in-flipbook" class="green-text"></span><span id="flipbook-url-extension" class="red-text">/Flipbook</span>)
+                </p>
+                
+              </div>
+              <p class="dots">...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipbook URL Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f4f8;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #generatedUrl {
+            padding: 15px;
+            background-color: #e9f7ef;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            word-wrap: break-word;
+        }
+
+        .main-domain {
+            color: #007bff;
+        }
+
+        .account-name {
+            color: #ff8c00;
+        }
+
+        .folder-path {
+            color: #28a745;
+        }
+
+        .flipbook-name {
+            color: #dc3545;
+        }
+
+        .folders {
+            margin-bottom: 10px;
+        }
+
+        #folderContainer {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .folderName {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flipbook URL Simulator</h1>
+
+    <div class="input-group">
+        <label for="accountName">Account Name:</label>
+        <input type="text" id="accountName" placeholder="Enter account name">
+    </div>
+
+    <div class="input-group folders">
+        <label for="folderName">Folder(s):</label>
+        <div id="folderContainer">
+            <input type="text" class="folderName" placeholder="Enter folder name">
+        </div>
+        <button onclick="addFolder()">Add Folder</button>
+    </div>
+
+    <div class="input-group">
+        <label for="flipbookName">Flipbook Name:</label>
+        <input type="text" id="flipbookName" placeholder="Enter flipbook name">
+    </div>
+
+    <div class="input-group">
+        <label for="brandedDomain">Branded Domain:</label>
+        <input type="text" id="brandedDomain" placeholder="Enter branded domain (optional)">
+    </div>
+
+    <div class="input-group">
+        <label>
+            <input type="checkbox" id="domainRoot">
+            Enable Domain Root
+        </label>
+    </div>
+
+    <h2>Generated URL:</h2>
+    <p id="generatedUrl"><span class="main-domain">https://viewer.ipaper.io</span>/account-name/folder/flipbook</p>
+
+    <script>
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', updateUrl);
+        });
+
+        function addFolder() {
+            const folderContainer = document.getElementById('folderContainer');
+            const newFolderInput = document.createElement('input');
+            newFolderInput.type = 'text';
+            newFolderInput.className = 'folderName';
+            newFolderInput.placeholder = 'Enter folder name';
+            newFolderInput.addEventListener('input', updateUrl);
+            folderContainer.appendChild(newFolderInput);
+        }
+
+        function sanitizeInput(input) {
+            return input.trim().replace(/\s+/g, '-');
+        }
+
+        function updateUrl() {
+            const accountName = sanitizeInput(document.getElementById('accountName').value);
+            const folderInputs = document.querySelectorAll('.folderName');
+            const folders = Array.from(folderInputs).map(input => sanitizeInput(input.value)).filter(value => value);
+            const flipbookName = sanitizeInput(document.getElementById('flipbookName').value);
+            const brandedDomain = document.getElementById('brandedDomain').value;
+            const domainRoot = document.getElementById('domainRoot').checked;
+
+            let url = 'https://';
+            let mainDomain = 'viewer.ipaper.io';
+            let accountNamePart = '';
+            let folderPath = '';
+            let flipbookPath = '';
+
+            if (brandedDomain) {
+                mainDomain = brandedDomain;
+                if (!domainRoot && accountName) {
+                    accountNamePart = `/${accountName}`;
+                }
+            } else {
+                // Default viewer domain, always include account name if available
+                if (accountName) {
+                    accountNamePart = `/${accountName}`;
+                }
+            }
+
+            if (folders.length > 0) {
+                folderPath = '/' + folders.join('/');
+            }
+
+            if (flipbookName) {
+                flipbookPath = `/${flipbookName}`;
+            }
+
+            // Construct the full URL with color coding
+            document.getElementById('generatedUrl').innerHTML = `
+                <span class="main-domain">${url}${mainDomain}</span>
+                ${accountNamePart ? '<span class="account-name">' + accountNamePart + '</span>' : ''}
+                ${folderPath ? '<span class="folder-path">' + folderPath + '</span>' : ''}
+                ${flipbookPath ? '<span class="flipbook-name">' + flipbookPath + '</span>' : ''}
+            `;
+        }
+    </script>
+</body>
+</html>

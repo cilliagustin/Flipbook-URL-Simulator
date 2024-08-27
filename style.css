@@ -1,0 +1,284 @@
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #F0F1F2; 
+}
+.main-container{
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+}
+
+#inputs {
+  font-family: Arial, sans-serif;
+
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+  grid-template-rows: repeat(5, auto);   /* Five rows with automatic height */
+  gap: 10px;
+}
+
+/* Title spanning both columns */
+#title {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+}
+
+/* Groups that span one column and are aligned side by side */
+#group-1, #group-3 {
+  grid-column: 1 / 2; /* Occupies the left column */
+}
+
+#group-2, #group-4 {
+  grid-column: 2 / 3; /* Occupies the right column */
+}
+
+/* Assigning specific rows to groups */
+#group-1, #group-2 {
+  grid-row: 2 / 3;
+
+}
+
+#group-3, #group-4 {
+  grid-row: 3 / 4;
+}
+
+/* Groups that span both columns */
+#group-5 {
+  grid-column: 1 / 3;
+  grid-row: 4 / 5;
+}
+
+#group-6 {
+  grid-column: 1 / 3;
+  grid-row: 5 / 6;
+}
+
+#inputs h1, h2 {
+  color: #333;
+}
+
+#inputs .input-group {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#inputs label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+#inputs input[type="text"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#inputs input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+#inputs button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#inputs button:hover {
+  background-color: #0056b3;
+}
+
+#inputs #generatedUrl {
+  padding: 15px;
+  background-color: #e9f7ef;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  border-radius: 5px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 20px;
+  word-wrap: break-word;
+}
+
+#inputs #folderContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+
+#inputs #folderContainer input{
+  width: auto;
+
+}
+
+#inputs #folderContainer input:last-child{
+  flex-grow: 1;
+
+}
+
+.blue-text {
+  color: #007bff;
+}
+
+.orange-text {
+  color: #ff8c00;
+}
+
+.green-text {
+  color: #28a745;
+}
+
+.red-text {
+  color: #dc3545;
+}
+
+
+#inputs .folderName {
+  margin-bottom: 5px;
+}
+
+
+#admin{
+  font-family: "Inter", sans-serif;
+  flex-grow: 1;
+  display: flex;
+  justify-items: center;
+  padding: 0 100px;
+}
+
+#adminContainer{
+  flex-grow: 1;
+}
+
+#adminContainer .titles{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#adminContainer .adminFolder{
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  display: block;
+  border: 1px solid #F0F1F2;
+  border-color: transparent;
+  background: #FFFFFF;
+  width: 100%;
+  min-height: 300px;
+}
+
+.adminFolder{
+  padding: 40px 0px;
+}
+
+.adminFolder .line,
+.adminFolder .title{
+  display: flex;
+  flex-flow: row;
+  justify-content: end;
+  padding: 0px 15px;
+}
+
+.adminFolder .line p,
+.adminFolder .title p{
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+#accountTitle{
+  font-weight: bold;
+}
+
+.line,
+.title{
+  margin: 8px 0;
+  padding: 0 10px;
+}
+
+.line:hover,
+.title:hover{
+background-color: #D6ECF8;
+}
+
+
+
+.line .dots,
+.title .dots{
+  margin-left: auto;
+  font-size: 16px;
+  color: rgb(117,123,128)
+}
+
+.line .level,
+.title .dots{
+  display: flex;
+  flex-flow: row;
+  gap: 3px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.level img{
+  height: 20px;
+}
+.level img:first-child{
+  height: 10px;
+}
+
+#flipbook-icon{
+  height: 16px;
+  margin-left: 15px;
+}
+
+.leveltext{
+  margin-right: 5px;
+}
+
+.level-0{
+  margin-left: 20px;
+}
+.level-1{
+  margin-left: 40px;
+}
+.level-2{
+  margin-left: 60px;
+}
+.level-3{
+  margin-left: 80px;
+}
+.level-4{
+  margin-left: 100px;
+}
+.level-5{
+  margin-left: 120px;
+}
+.level-6{
+  margin-left: 140px;
+}
+.level-7{
+  margin-left: 160px;
+}
+.level-8{
+  margin-left: 180px;
+}
+.level-9{
+  margin-left: 200px;
+}
+.level-10{
+  margin-left: 220px;
+}
